@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hot Beans Web — Careers (Design 2)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A0E1A;
+      --navy:    #0F1F3D;
+      --blue:    #1A3A6B;
+      --accent:  #3B82F6;
+      --bright:  #60A5FA;
+      --purple:  #7C3AED;
+      --pale:    #E8F0FE;
+      --bg:      #F0F4FF;
+      --white:   #FFFFFF;
+      --text:    #0A0E1A;
+      --muted:   #5A6A8A;
+      --border:  #C7D7F0;
+      --card-bg: #FFFFFF;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR LAYOUT ── */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: var(--ink);
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1.25rem;
+      z-index: 200;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      font-family: 'Space Mono', monospace;
+      color: var(--white);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+    .sidebar-logo span { color: var(--bright); }
+    .sidebar-sub { font-size: 0.68rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2.5rem; }
+
+    .nav-section { margin-bottom: 0.4rem; }
+    .nav-section-label {
+      font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.25); font-weight: 700; padding: 0 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 0.6rem;
+      color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 500;
+      padding: 0.6rem 0.75rem; border-radius: 8px;
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+      border: none; background: none; width: 100%;
+      font-family: 'Space Grotesk', sans-serif; text-align: left;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.06); color: var(--white); }
+    .nav-item.active { background: var(--blue); color: var(--white); }
+    .nav-item .ni { font-size: 1rem; }
+
+    .sidebar-cta {
+      margin-top: auto;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+      transition: background 0.2s;
+    }
+    .sidebar-cta:hover { background: #2563eb; }
+
+    /* Main content area */
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* Page header bar */
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-title { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+    .topbar-badge {
+      background: rgba(59,130,246,0.1); color: var(--accent);
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; padding: 3px 10px; border-radius: 99px;
+    }
+
+    /* ── PAGES ── */
+    .page { display: none; padding: 2.5rem; }
+    .page.active { display: block; }
+
+    /* ── SHARED COMPONENTS ── */
+    .page-header { margin-bottom: 2.5rem; }
+    .ph-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .ph-title {
+      font-size: 2rem; font-weight: 700; color: var(--ink);
+      line-height: 1.2; margin-bottom: 0.6rem;
+    }
+    .ph-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.75; max-width: 560px; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+    }
+    .card + .card { margin-top: 1.25rem; }
+
+    /* ── HOME ── */
+    .hero-banner {
+      background: var(--ink);
+      border-radius: 18px;
+      padding: 3.5rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(59,130,246,0.25), transparent 70%);
+    }
+    .hero-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 250px; height: 250px;
+      background: radial-gradient(circle, rgba(124,58,237,0.15), transparent 70%);
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--bright);
+      background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3);
+      padding: 3px 10px; border-radius: 99px;
+      margin-bottom: 1.25rem; position: relative; z-index: 1;
+    }
+    .hero-tag::before { content: '▶'; font-size: 0.45rem; }
+    .hero-banner h1 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      position: relative; z-index: 1;
+    }
+    .hero-banner h1 .hl { color: var(--bright); }
+    .hero-banner p {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.92rem; line-height: 1.8;
+      max-width: 520px; margin-bottom: 1.75rem;
+      position: relative; z-index: 1;
+    }
+    .hero-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; position: relative; z-index: 1; }
+    .btn-blue {
+      background: var(--accent); color: var(--white);
+      border: none; border-radius: 8px; padding: 0.7rem 1.5rem;
+      font-size: 0.85rem; font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn-blue:hover { background: #2563eb; }
+    .btn-outline-light {
+      background: transparent; color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+      padding: 0.7rem 1.5rem; font-size: 0.85rem; font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline-light:hover { border-color: rgba(255,255,255,0.5); color: var(--white); }
+
+    /* stat cards row */
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem;
+      border-left: 3px solid var(--accent);
+    }
+    .sc-n { font-family: 'Space Mono', monospace; font-size: 1.8rem; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 0.25rem; }
+    .sc-l { font-size: 0.75rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* about two-col */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem; }
+    .card h3 { font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 0.75rem; }
+    .card p  { font-size: 0.87rem; color: var(--muted); line-height: 1.8; }
+    .card p + p { margin-top: 0.6rem; }
+
+    /* values list */
+    .val-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem; }
+    .val-item {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.75rem; background: var(--bg); border-radius: 8px;
+    }
+    .val-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+    .val-text h4 { font-size: 0.85rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; }
+    .val-text p  { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── TEAM ── */
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1.25rem; }
+    .tc {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .tc:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(10,14,26,0.1); }
+    .tc-top {
+      background: var(--navy);
+      padding: 1.5rem 1.25rem 1.25rem;
+      text-align: center;
+    }
+    .tc-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      margin: 0 auto 0.75rem;
+      border: 2px solid rgba(255,255,255,0.15);
+      overflow: hidden; background: var(--blue);
+    }
+    .tc-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .tc-name { font-size: 0.92rem; font-weight: 700; color: var(--white); margin-bottom: 0.2rem; }
+    .tc-role { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--bright); text-transform: uppercase; letter-spacing: 0.08em; }
+    .tc-body { padding: 1.1rem 1.25rem; }
+    .tc-qual {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      background: var(--pale); color: var(--blue);
+      padding: 2px 8px; border-radius: 6px; margin-bottom: 0.6rem;
+    }
+    .tc-bio { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── JOBS ── */
+    .job-card-alt {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .jca-head {
+      background: var(--navy);
+      padding: 1.5rem 2rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .jca-title { font-size: 1.2rem; font-weight: 700; color: var(--white); margin-bottom: 0.35rem; }
+    .jca-chips { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .jc { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 9px; border-radius: 6px; }
+    .jc-blue   { background: rgba(59,130,246,0.25); color: var(--bright); }
+    .jc-purple { background: rgba(124,58,237,0.25); color: #a78bfa; }
+    .jc-white  { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+    .jca-btn {
+      background: var(--accent); color: var(--white); border: none;
+      border-radius: 8px; padding: 0.6rem 1.25rem;
+      font-size: 0.82rem; font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif; cursor: pointer;
+      white-space: nowrap; transition: background 0.2s;
+    }
+    .jca-btn:hover { background: #2563eb; }
+    .jca-body { padding: 1.75rem 2rem; }
+    .jca-body h4 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--accent); margin: 1.25rem 0 0.5rem;
+    }
+    .jca-body h4:first-child { margin-top: 0; }
+    .jca-body p { font-size: 0.87rem; color: var(--muted); line-height: 1.8; }
+    .jca-body ul { padding-left: 1.25rem; }
+    .jca-body li { font-size: 0.85rem; color: var(--muted); line-height: 1.75; }
+    .req-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+
+    /* ── FORM ── */
+    #form-section {
+      display: none; background: var(--white);
+      border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden; margin-top: 2rem; scroll-margin-top: 3rem;
+    }
+    .form-head {
+      background: var(--navy);
+      padding: 1.25rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .fh-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
+    .fh-role  { font-size: 1rem; font-weight: 700; color: var(--white); }
+    .close-x  { background: none; border: none; color: rgba(255,255,255,0.35); font-size: 1.3rem; cursor: pointer; padding: 4px; }
+    .close-x:hover { color: var(--white); }
+    .form-body { padding: 2rem; }
+    .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .f-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .f-group.full { grid-column: 1 / -1; }
+    label { font-size: 0.75rem; font-weight: 600; color: var(--ink); letter-spacing: 0.02em; }
+    label .r { color: var(--accent); }
+    input[type=text], input[type=email], input[type=tel], textarea, select {
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.87rem;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 0.6rem 0.85rem; background: var(--bg);
+      color: var(--text); outline: none; width: 100%;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); background: var(--white); }
+    textarea { min-height: 110px; resize: vertical; }
+    .upload-zone {
+      border: 2px dashed var(--border); border-radius: 10px;
+      padding: 1.75rem; text-align: center; cursor: pointer;
+      position: relative; transition: border-color 0.2s, background 0.2s;
+    }
+    .upload-zone:hover { border-color: var(--accent); background: var(--pale); }
+    .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .u-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+    .u-title { font-weight: 600; font-size: 0.87rem; color: var(--ink); }
+    .u-hint  { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+    .u-file  { font-size: 0.75rem; color: var(--accent); font-weight: 700; margin-top: 0.4rem; min-height: 1.1em; }
+    .submit-btn {
+      background: var(--accent); color: var(--white); border: none;
+      border-radius: 8px; padding: 0.8rem 2rem;
+      font-size: 0.88rem; font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .submit-btn:hover { background: #2563eb; }
+    .f-note { font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; }
+
+    #success {
+      display: none; background: #f0fdf4;
+      border: 1px solid #bbf7d0; border-radius: 14px;
+      padding: 2.5rem; text-align: center; margin-top: 1.5rem;
+    }
+    #success h3 { font-size: 1.3rem; font-weight: 700; color: #065f46; margin-bottom: 0.5rem; }
+    #success p  { font-size: 0.87rem; color: #166534; line-height: 1.6; }
+
+    /* ── COURSES ── */
+    .courses-list { display: flex; flex-direction: column; gap: 1rem; }
+    .course-row {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem 1.5rem;
+      display: flex; align-items: center; gap: 1.5rem;
+      transition: box-shadow 0.2s;
+    }
+    .course-row:hover { box-shadow: 0 4px 14px rgba(10,14,26,0.08); }
+    .cr-icon { font-size: 2rem; flex-shrink: 0; }
+    .cr-body { flex: 1; }
+    .cr-name { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; }
+    .cr-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+    .cr-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    .cr-tag  { font-size: 0.65rem; font-weight: 700; background: var(--pale); color: var(--blue); padding: 2px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cr-link {
+      display: inline-block; background: var(--navy); color: var(--white);
+      text-decoration: none; font-size: 0.8rem; font-weight: 700;
+      padding: 0.5rem 1.1rem; border-radius: 8px;
+      transition: background 0.2s; white-space: nowrap; flex-shrink: 0;
+    }
+    .cr-link:hover { background: var(--blue); }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      margin-top: 3rem; border-top: 1px solid var(--border);
+      padding: 1.5rem 0; font-size: 0.78rem; color: var(--muted);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .req-grid { grid-template-columns: 1fr; }
+      .fg { grid-template-columns: 1fr; }
+      .jca-head { flex-direction: column; align-items: flex-start; }
+      .course-row { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 600px) {
+      .page { padding: 1.5rem 1rem; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Hot<span>Beans</span>.web</div>
+    <div class="sidebar-sub">Careers Portal</div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Company</div>
+      <button class="nav-item active" id="nb-home" onclick="go('home')">
+        <span class="ni">🏠</span> Home
+      </button>
+      <button class="nav-item" id="nb-team" onclick="go('team')">
+        <span class="ni">👥</span> Our Team
+      </button>
+    </div>
+
+    <div class="nav-section" style="margin-top:1rem;">
+      <div class="nav-section-label">Opportunities</div>
+      <button class="nav-item" id="nb-jobs" onclick="go('jobs')">
+        <span class="ni">💼</span> Job Roles
+      </button>
+      <button class="nav-item" id="nb-courses" onclick="go('courses')">
+        <span class="ni">📚</span> Courses
+      </button>
+    </div>
+
+    <button class="sidebar-cta" onclick="go('jobs'); setTimeout(()=>document.getElementById('apply-anchor').scrollIntoView({behavior:'smooth'}),400)">
+      Apply Now →
+    </button>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main-content">
+
+    <div class="topbar">
+      <span class="topbar-title" id="topbar-title">Hot Beans Web — Careers</span>
+      <span class="topbar-badge">Now Hiring</span>
+    </div>
+
+    <!-- ═══ HOME ═══ -->
+    <div id="page-home" class="page active">
+
+      <div class="hero-banner">
+        <div class="hero-tag">We're recruiting</div>
+        <h1>Build the <span class="hl">future of the web.</span><br>Start here.</h1>
+        <p>Hot Beans Web is a UK-based web development company looking for junior frontend and backend developers. If you've completed a relevant qualification or course, we want to hear from you.</p>
+        <div class="hero-btns">
+          <button class="btn-blue" onclick="go('jobs')">View Open Roles →</button>
+          <button class="btn-outline-light" onclick="go('team')">Meet the Team</button>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card"><div class="sc-n">50+</div><div class="sc-l">Clients Served</div></div>
+        <div class="stat-card"><div class="sc-n">18</div><div class="sc-l">Team Members</div></div>
+        <div class="stat-card"><div class="sc-n">8yrs</div><div class="sc-l">Established</div></div>
+        <div class="stat-card"><div class="sc-n">100%</div><div class="sc-l">Remote Friendly</div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <h3>About Hot Beans Web</h3>
+          <p>Founded in 2017, Hot Beans Web is a full-service UK web development agency. We build fast, accessible, and well-designed applications for clients in e-commerce, healthcare, education, and the public sector.</p>
+          <p>We've grown from a 3-person startup to a team of 18 developers, designers, and project managers. Crucially, most of our senior staff started their career with us directly after completing qualifications — just like the ones we're recruiting for now.</p>
+          <p>We believe that a junior developer with strong fundamentals and the right attitude can be shaped into an excellent engineer. That's why we invest heavily in mentorship and training from day one.</p>
+        </div>
+        <div class="card">
+          <h3>Our Values</h3>
+          <div class="val-list">
+            <div class="val-item">
+              <div class="val-dot"></div>
+              <div class="val-text"><h4>Craft matters</h4><p>We write clean, documented, tested code. No shortcuts.</p></div>
+            </div>
+            <div class="val-item">
+              <div class="val-dot"></div>
+              <div class="val-text"><h4>Ship real things</h4><p>Junior devs push to production within their first month.</p></div>
+            </div>
+            <div class="val-item">
+              <div class="val-dot"></div>
+              <div class="val-text"><h4>Accessible by default</h4><p>WCAG compliance is non-negotiable on every project.</p></div>
+            </div>
+            <div class="val-item">
+              <div class="val-dot"></div>
+              <div class="val-text"><h4>Keep learning</h4><p>£1,500 annual learning budget for every team member.</p></div>
+            </div>
+            <div class="val-item">
+              <div class="val-dot"></div>
+              <div class="val-text"><h4>Inclusive culture</h4><p>Remote-first, diverse, and zero tolerance for discrimination.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background:var(--navy);border-color:var(--blue);text-align:center;padding:2.5rem;">
+        <p style="font-family:'Space Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--bright);margin-bottom:0.75rem;">Open Positions Available</p>
+        <h2 style="font-size:1.6rem;font-weight:700;color:var(--white);margin-bottom:0.75rem;">Junior Frontend &amp; Backend Developers</h2>
+        <p style="color:rgba(255,255,255,0.45);font-size:0.88rem;margin-bottom:1.5rem;">Full-time · Remote &amp; London · £24,000–£30,000</p>
+        <button class="btn-blue" onclick="go('jobs')">See Full Job Specs →</button>
+      </div>
+
+      <div class="page-footer">© 2025 Hot Beans Web Ltd · All rights reserved</div>
+    </div>
+
+    <!-- ═══ TEAM ═══ -->
+    <div id="page-team" class="page">
+      <div class="page-header">
+        <div class="ph-eyebrow">// the_crew</div>
+        <h1 class="ph-title">Meet our trainee developers</h1>
+        <p class="ph-sub">These are the people who joined us fresh from courses and qualifications — here's what they studied, what they do, and what they'd tell their past selves.</p>
+      </div>
+      <div class="team-grid" id="team-grid"></div>
+      <div class="page-footer">© 2025 Hot Beans Web Ltd</div>
+    </div>
+
+    <!-- ═══ JOBS ═══ -->
+    <div id="page-jobs" class="page">
+      <div class="page-header">
+        <div class="ph-eyebrow">// open_positions</div>
+        <h1 class="ph-title">Current vacancies</h1>
+        <p class="ph-sub">Two junior roles are open now. Both are suitable for people who have recently completed a relevant course, bootcamp, or qualification.</p>
+      </div>
+
+      <!-- Frontend -->
+      <div class="job-card-alt">
+        <div class="jca-head">
+          <div>
+            <div class="jca-title">Junior Frontend Developer</div>
+            <div class="jca-chips">
+              <span class="jc jc-blue">Full-time</span>
+              <span class="jc jc-blue">Remote</span>
+              <span class="jc jc-purple">£24,000–£28,000</span>
+              <span class="jc jc-white">Engineering</span>
+            </div>
+          </div>
+          <button class="jca-btn" onclick="openForm('Junior Frontend Developer')">Apply Now →</button>
+        </div>
+        <div class="jca-body">
+          <h4>Role Overview</h4>
+          <p>You will work within our frontend team building responsive, accessible web interfaces for client projects. You'll be paired with a senior developer mentor and involved in live client work from week one.</p>
+
+          <h4>Key Responsibilities</h4>
+          <ul>
+            <li>Build responsive UIs using HTML5, CSS3, and JavaScript (ES6+)</li>
+            <li>Develop reusable components in React</li>
+            <li>Implement designs from Figma with pixel accuracy</li>
+            <li>Write clean code and participate in peer code reviews</li>
+            <li>Carry out cross-browser and cross-device testing</li>
+            <li>Contribute to WCAG 2.1 accessibility audits</li>
+          </ul>
+
+          <h4>Required Qualifications</h4>
+          <div class="req-grid">
+            <ul>
+              <li>Level 3 qualification in IT, Computing, or Software Development</li>
+              <li>Completion of an accredited web development course or bootcamp</li>
+              <li>Solid understanding of HTML, CSS, and JavaScript</li>
+            </ul>
+            <ul>
+              <li>Use of Git/GitHub in a project context</li>
+              <li>Portfolio of at least 2 web projects</li>
+              <li>GCSE Maths and English (Grade C/4 or above)</li>
+            </ul>
+          </div>
+
+          <h4>Desirable (Not Essential)</h4>
+          <ul>
+            <li>Experience with React or another JavaScript framework</li>
+            <li>Familiarity with CSS preprocessors or Tailwind CSS</li>
+            <li>Awareness of web performance optimisation techniques</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Backend -->
+      <div class="job-card-alt">
+        <div class="jca-head">
+          <div>
+            <div class="jca-title">Junior Backend Developer</div>
+            <div class="jca-chips">
+              <span class="jc jc-blue">Full-time</span>
+              <span class="jc jc-blue">London / Remote</span>
+              <span class="jc jc-purple">£25,000–£30,000</span>
+              <span class="jc jc-white">Engineering</span>
+            </div>
+          </div>
+          <button class="jca-btn" onclick="openForm('Junior Backend Developer')">Apply Now →</button>
+        </div>
+        <div class="jca-body">
+          <h4>Role Overview</h4>
+          <p>You will join our backend team to build and maintain the APIs, databases, and infrastructure that power our platforms. Real responsibility and a dedicated mentor from your first day.</p>
+
+          <h4>Key Responsibilities</h4>
+          <ul>
+            <li>Build RESTful APIs using Node.js (Express) or Python (Django/Flask)</li>
+            <li>Design and manage relational databases (PostgreSQL / MySQL)</li>
+            <li>Write unit and integration tests to maintain code quality</li>
+            <li>Deploy and monitor applications on cloud platforms (AWS / GCP)</li>
+            <li>Implement secure authentication and input validation</li>
+            <li>Document APIs using OpenAPI / Swagger standards</li>
+          </ul>
+
+          <h4>Required Qualifications</h4>
+          <div class="req-grid">
+            <ul>
+              <li>Level 3 qualification in Computing, Software Development, or equivalent</li>
+              <li>Completion of a coding bootcamp or programming course</li>
+              <li>Proficiency in at least one server-side language (Python, Node.js, PHP)</li>
+            </ul>
+            <ul>
+              <li>Basic SQL and relational database knowledge</li>
+              <li>Understanding of HTTP, REST, and JSON</li>
+              <li>Use of Git for version control</li>
+            </ul>
+          </div>
+
+          <h4>Desirable (Not Essential)</h4>
+          <ul>
+            <li>Experience with Docker or containerised workflows</li>
+            <li>Familiarity with CI/CD pipelines (e.g. GitHub Actions)</li>
+            <li>Exposure to NoSQL databases (MongoDB)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Form anchor -->
+      <div id="apply-anchor"></div>
+
+      <!-- Application Form -->
+      <section id="form-section">
+        <div class="form-head">
+          <div>
+            <div class="fh-label">// applying_for</div>
+            <div class="fh-role" id="form-role"></div>
+          </div>
+          <button class="close-x" onclick="closeForm()">&times;</button>
+        </div>
+        <div class="form-body">
+          <div class="ph-eyebrow" style="margin-bottom:0.5rem;">// application_form</div>
+          <h2 style="font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:1.5rem;">Tell us about yourself</h2>
+
+          <form id="app-form" onsubmit="submitForm(event)">
+            <div class="fg">
+              <div class="f-group"><label for="f-first">First name <span class="r">*</span></label><input type="text" id="f-first" required placeholder="Jane" /></div>
+              <div class="f-group"><label for="f-last">Last name <span class="r">*</span></label><input type="text" id="f-last" required placeholder="Smith" /></div>
+              <div class="f-group"><label for="f-email">Email address <span class="r">*</span></label><input type="email" id="f-email" required placeholder="jane@example.com" /></div>
+              <div class="f-group"><label for="f-phone">Phone number</label><input type="tel" id="f-phone" placeholder="+44 7700 000000" /></div>
+              <div class="f-group full"><label for="f-port">GitHub / Portfolio URL <span class="r">*</span></label><input type="text" id="f-port" required placeholder="https://github.com/janesmith" /></div>
+              <div class="f-group full">
+                <label for="f-qual">Highest relevant qualification <span class="r">*</span></label>
+                <select id="f-qual" required>
+                  <option value="">Select one…</option>
+                  <option>BTEC Level 3 in Computing</option>
+                  <option>A-Level Computer Science</option>
+                  <option>Web Development Bootcamp</option>
+                  <option>HND/HNC Computing</option>
+                  <option>BSc Computer Science</option>
+                  <option>Other relevant qualification</option>
+                </select>
+              </div>
+              <div class="f-group full"><label for="f-cover">Why do you want to join Hot Beans Web? <span class="r">*</span></label><textarea id="f-cover" required placeholder="Tell us what excites you about this role, what you've built so far, and why you'd be a great fit…"></textarea></div>
+              <div class="f-group full">
+                <label>CV / Résumé <span class="r">*</span></label>
+                <div class="upload-zone" id="uzone">
+                  <input type="file" id="f-cv" accept=".pdf,.doc,.docx" required onchange="pickFile(this)" />
+                  <div class="u-icon">📄</div>
+                  <div class="u-title">Drop your CV here or click to browse</div>
+                  <div class="u-hint">PDF, DOC, or DOCX · max 5 MB</div>
+                  <div class="u-file" id="u-name"></div>
+                </div>
+              </div>
+              <div class="f-group full">
+                <button type="submit" class="submit-btn">Submit Application →</button>
+                <p class="f-note">Your information is used only for this application and handled in line with GDPR.</p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <div id="success">
+        <div style="font-size:2.2rem;margin-bottom:0.75rem;">✅</div>
+        <h3>Application received!</h3>
+        <p>Thank you for applying to Hot Beans Web. We'll review your submission and be in touch within 7 working days.</p>
+      </div>
+
+      <div class="page-footer">© 2025 Hot Beans Web Ltd · All rights reserved</div>
+    </div>
+
+    <!-- ═══ COURSES ═══ -->
+    <div id="page-courses" class="page">
+      <div class="page-header">
+        <div class="ph-eyebrow">// learning_resources</div>
+        <h1 class="ph-title">Recommended courses</h1>
+        <p class="ph-sub">Not ready to apply yet? These are the resources we recommend to anyone looking to build or strengthen their web development skills. Many of our current team used these exact platforms.</p>
+      </div>
+
+      <div class="courses-list" id="courses-list"></div>
+
+      <div class="page-footer">© 2025 Hot Beans Web Ltd · All rights reserved</div>
+    </div>
+
+  </div><!-- end main-content -->
+</div><!-- end layout -->
+
+<script>
+  /* ── NAV ── */
+  const titles = {
+    home: 'Hot Beans Web — Careers Portal',
+    team: 'Hot Beans Web — Meet the Team',
+    jobs: 'Hot Beans Web — Job Roles',
+    courses: 'Hot Beans Web — Courses & Resources'
+  };
+  function go(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item[id]').forEach(b => b.classList.remove('active'));
+    const nb = document.getElementById('nb-' + name);
+    if (nb) nb.classList.add('active');
+    document.getElementById('topbar-title').textContent = titles[name] || 'Hot Beans Web';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── TEAM ── */
+  const team = [
+    { name: 'Chloe Davies',  role: 'Jr. Frontend Dev', qual: 'BTEC L3 Computing', seed: 'Chloe',  bio: 'Joined straight from college. Now building React component libraries and leading our accessibility checklist initiative.' },
+    { name: 'Marcus Asante', role: 'Jr. Backend Dev',  qual: 'CodeClan Bootcamp',  seed: 'Marcus', bio: 'Career changer from retail. Completed a 16-week bootcamp and now writes the Node.js APIs serving thousands of daily users.' },
+    { name: 'Priya Shah',    role: 'Jr. Frontend Dev', qual: 'The Odin Project',   seed: 'Priya',  bio: 'Self-taught via The Odin Project combined with a part-time college course. Six months in and already mentoring newcomers.' },
+    { name: 'Tom Griffiths', role: 'Jr. Full-stack',   qual: 'BSc Computer Sci',  seed: 'Tom',    bio: 'CS graduate who preferred real client work over a grad scheme. Working across three client projects simultaneously.' },
+    { name: 'Aisha Okafor',  role: 'Jr. Backend Dev',  qual: 'HND Computing',     seed: 'Aisha',  bio: 'HND from Coventry College. Passionate about database architecture and already coaching the newest team joiners.' },
+    { name: 'Ryan Patel',    role: 'Jr. Frontend Dev', qual: 'freeCodeCamp',      seed: 'Ryan',   bio: 'Earnt freeCodeCamp certifications while working part-time. His portfolio was impressive enough to hire on the spot.' },
+  ];
+
+  document.getElementById('team-grid').innerHTML = team.map(m => `
+    <div class="tc">
+      <div class="tc-top">
+        <div class="tc-avatar">
+          <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=${m.seed}&backgroundColor=0f1f3d&radius=50" alt="Illustrated avatar of ${m.name}" loading="lazy" />
+        </div>
+        <div class="tc-name">${m.name}</div>
+        <div class="tc-role">${m.role}</div>
+      </div>
+      <div class="tc-body">
+        <span class="tc-qual">${m.qual}</span>
+        <div class="tc-bio">${m.bio}</div>
+      </div>
+    </div>
+  `).join('');
+
+  /* ── COURSES ── */
+  const courses = [
+    { icon:'🆓', name:'freeCodeCamp', desc:'Completely free, comprehensive curriculum covering responsive web design, JavaScript algorithms, React, Node.js and databases. Includes verifiable certifications recognised by employers.', tags:['Free','HTML/CSS','JS','React','Node'], url:'https://www.freecodecamp.org' },
+    { icon:'🌳', name:'The Odin Project', desc:'A free, open-source full-stack web development curriculum built and maintained by the community. One of the most thorough self-taught pathways available.', tags:['Free','Full-stack','Project-based'], url:'https://www.theodinproject.com' },
+    { icon:'📘', name:'Codecademy', desc:'Interactive, browser-based coding lessons from beginner to advanced. Excellent for learning HTML, CSS, JavaScript, Python, and SQL with immediate feedback.', tags:['Interactive','Free tier','Beginner-friendly'], url:'https://www.codecademy.com' },
+    { icon:'📚', name:'MDN Web Docs', desc:'Mozilla\'s official reference for HTML, CSS, and JavaScript — the most authoritative documentation on the open web. Essential reading for any working web developer.', tags:['Free','Reference','Official'], url:'https://developer.mozilla.org' },
+    { icon:'🎓', name:'Coursera — Web Dev', desc:'University-backed courses from institutions like University of Michigan. Covers full-stack development, responsive design, and JavaScript frameworks. Many are free to audit.', tags:['Free audit','University','Certificates'], url:'https://www.coursera.org/browse/computer-science/web-development' },
+    { icon:'🏫', name:'W3Schools', desc:'Quick reference tutorials and exercises for HTML, CSS, JavaScript, SQL and more. Ideal for looking up syntax, trying short examples, and testing your knowledge with quizzes.', tags:['Free','Reference','Exercises'], url:'https://www.w3schools.com' },
+  ];
+
+  document.getElementById('courses-list').innerHTML = courses.map(c => `
+    <div class="course-row">
+      <div class="cr-icon">${c.icon}</div>
+      <div class="cr-body">
+        <div class="cr-name">${c.name}</div>
+        <div class="cr-desc">${c.desc}</div>
+        <div class="cr-tags">${c.tags.map(t=>`<span class="cr-tag">${t}</span>`).join('')}</div>
+      </div>
+      <a class="cr-link" href="${c.url}" target="_blank" rel="noopener">Visit →</a>
+    </div>
+  `).join('');
+
+  /* ── FORM ── */
+  function openForm(role) {
+    document.getElementById('form-role').textContent = role;
+    const s = document.getElementById('form-section');
+    s.style.display = 'block';
+    document.getElementById('success').style.display = 'none';
+    setTimeout(() => s.scrollIntoView({ behavior: 'smooth' }), 100);
+  }
+  function closeForm() {
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('app-form').reset();
+    document.getElementById('u-name').textContent = '';
+  }
+  function pickFile(input) {
+    const f = input.files[0];
+    if (!f) return;
+    if (f.size > 5 * 1024 * 1024) { alert('File too large — max 5 MB.'); input.value = ''; return; }
+    document.getElementById('u-name').textContent = '✓ ' + f.name;
+  }
+  const uz = document.getElementById('uzone');
+  uz.addEventListener('dragover', e => { e.preventDefault(); uz.style.borderColor = 'var(--accent)'; });
+  uz.addEventListener('dragleave', () => uz.style.borderColor = '');
+  uz.addEventListener('drop', () => uz.style.borderColor = '');
+
+  function submitForm(e) {
+    e.preventDefault();
+    closeForm();
+    const s = document.getElementById('success');
+    s.style.display = 'block';
+    s.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
