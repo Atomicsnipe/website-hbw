@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hot Beans Web — Join Our Team</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* =====================================================
+       DESIGN 1 — Hot Beans Web Careers Site
+       Theme: Forest green / mint / white
+       Layout: Sticky top nav, multi-section SPA
+       All 5 client requirements covered:
+         Req 1 - Company profile    (Home page)
+         Req 2 - Trainee profiles   (Team page)
+         Req 3 - Job specs + quals  (Jobs page)
+         Req 4 - Online app form    (Jobs page)
+         Req 5 - Course links       (Courses page)
+    ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --forest: #0D2B1F; --green: #1A5C3A; --mid: #2E7D52;
+      --lime: #5CB85C; --mint: #D4EDDA; --cream: #F5FAF6;
+      --white: #FFFFFF; --text: #0D2B1F; --muted: #5A7A6A; --border: #C3DEC9;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text); }
+
+    /* NAV */
+    nav { background: var(--forest); height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; position: sticky; top: 0; z-index: 300; }
+    .logo { font-family: 'Sora', sans-serif; color: var(--white); font-size: 1.15rem; font-weight: 800; cursor: pointer; }
+    .logo span { color: var(--lime); }
+    .nav-links { display: flex; gap: 0.25rem; align-items: center; }
+    .nav-links button { background: none; border: none; color: rgba(255,255,255,0.6); font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500; padding: 0.45rem 0.9rem; border-radius: 6px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .nav-links button:hover  { background: rgba(255,255,255,0.08); color: var(--white); }
+    .nav-links button.active { background: var(--mid); color: var(--white); }
+    .nav-cta { background: var(--lime) !important; color: var(--forest) !important; font-weight: 700 !important; }
+    .nav-cta:hover { background: #4aa84a !important; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* SHARED */
+    .wrap { max-width: 980px; margin: 0 auto; padding: 4.5rem 2rem; }
+    .lbl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: var(--lime); background: rgba(92,184,92,0.12); padding: 3px 10px; border-radius: 99px; display: inline-block; margin-bottom: 0.75rem; }
+    .stitle { font-family: 'Sora', sans-serif; font-size: 1.9rem; font-weight: 800; color: var(--forest); line-height: 1.2; margin-bottom: 0.85rem; }
+    .ssub { font-size: 0.93rem; color: var(--muted); line-height: 1.8; max-width: 580px; }
+    hr { border: none; border-top: 1px solid var(--border); }
+
+    /* HERO */
+    .hero { background: var(--forest); min-height: 86vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 5rem 2rem; position: relative; overflow: hidden; }
+    .hero::after { content:''; position: absolute; inset: 0; background: radial-gradient(ellipse 65% 55% at 50% 115%, rgba(92,184,92,0.18), transparent); }
+    .hc { position: relative; z-index: 1; max-width: 700px; }
+    .hbadge { display: inline-flex; align-items: center; gap: 6px; background: rgba(92,184,92,0.15); border: 1px solid rgba(92,184,92,0.35); color: #8ae08a; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.9rem; border-radius: 99px; margin-bottom: 1.75rem; }
+    .hbadge::before { content:'●'; color: var(--lime); font-size: 0.5rem; }
+    .hero h1 { font-family: 'Sora', sans-serif; font-weight: 800; font-size: clamp(2.4rem, 6vw, 4rem); color: var(--white); line-height: 1.1; margin-bottom: 1.25rem; }
+    .hero h1 span { color: var(--lime); }
+    .hero p { color: rgba(255,255,255,0.58); font-size: 1rem; line-height: 1.8; margin-bottom: 2.25rem; }
+    .hbtns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btng { background: var(--lime); color: var(--forest); border: none; border-radius: 10px; padding: 0.85rem 1.75rem; font-size: 0.9rem; font-weight: 700; font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.2s; }
+    .btng:hover { background: #4aa84a; }
+    .btno { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.25); border-radius: 10px; padding: 0.85rem 1.75rem; font-size: 0.9rem; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: border-color 0.2s; }
+    .btno:hover { border-color: rgba(255,255,255,0.6); }
+    .stats { background: var(--green); display: flex; justify-content: center; gap: 5rem; flex-wrap: wrap; padding: 1.75rem 2rem; }
+    .stat { text-align: center; color: var(--white); }
+    .sn { font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; margin-bottom: 0.2rem; }
+    .sl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.65; font-weight: 600; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .about-img { background: var(--forest); border-radius: 18px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 6rem; position: relative; overflow: hidden; }
+    .about-img::before { content:''; position: absolute; inset: 0; background: radial-gradient(circle at 40% 60%, rgba(92,184,92,0.2), transparent 60%); }
+    .about-img span { position: relative; }
+    .about-text p { font-size: 0.93rem; color: var(--muted); line-height: 1.85; margin-top: 0.85rem; }
+    .vgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 2.5rem; }
+    .vcard { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; border-top: 3px solid var(--lime); }
+    .vi { font-size: 1.75rem; margin-bottom: 0.65rem; }
+    .vt { font-family: 'Sora', sans-serif; font-size: 0.93rem; font-weight: 700; color: var(--forest); margin-bottom: 0.35rem; }
+    .vd { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+    /* TEAM */
+    .tgrid { display: grid; grid-template-columns: repeat(auto-fill,minmax(210px,1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .tcard { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem 1.25rem 1.5rem; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+    .tcard:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(13,43,31,0.1); }
+    .ava { width: 88px; height: 88px; border-radius: 50%; margin: 0 auto 1rem; border: 3px solid var(--mint); overflow: hidden; background: var(--mint); }
+    .ava img { width: 100%; height: 100%; object-fit: cover; }
+    .tn { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--forest); margin-bottom: 0.2rem; }
+    .tr { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--lime); margin-bottom: 0.5rem; }
+    .tq { display: inline-block; font-size: 0.72rem; background: var(--mint); color: var(--green); padding: 2px 9px; border-radius: 99px; font-weight: 600; margin-bottom: 0.6rem; }
+    .tb { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+    /* JOBS */
+    .jcard { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; margin-bottom: 1.5rem; }
+    .jtop { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .jt { font-family: 'Sora', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--forest); margin-bottom: 0.35rem; }
+    .chips { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .chip { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 10px; border-radius: 99px; }
+    .cg { background: var(--mint); color: var(--green); }
+    .cs { background: #f0f0f0; color: #555; }
+    .abtn { background: var(--green); color: var(--white); border: none; border-radius: 8px; padding: 0.6rem 1.25rem; font-size: 0.85rem; font-weight: 700; font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+    .abtn:hover { background: var(--forest); }
+    .jsh { font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--forest); text-transform: uppercase; letter-spacing: 0.05em; margin: 1.1rem 0 0.45rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+    .jcard p.ov { font-size: 0.88rem; color: var(--muted); line-height: 1.75; }
+    .jcard ul { padding-left: 1.25rem; }
+    .jcard li { font-size: 0.86rem; color: var(--muted); line-height: 1.7; }
+    .qcols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2.5rem; }
+
+    /* FORM */
+    #form-section { display: none; background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; margin-top: 2rem; scroll-margin-top: 5rem; }
+    .fbanner { background: var(--forest); border-radius: 10px; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+    .fbl { font-size: 0.72rem; color: rgba(255,255,255,0.45); margin-bottom: 2px; }
+    .fbr { font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--white); }
+    .cx { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 1.4rem; cursor: pointer; padding: 4px; }
+    .cx:hover { color: var(--white); }
+    .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .fgg { display: flex; flex-direction: column; gap: 0.4rem; }
+    .fgg.full { grid-column: 1/-1; }
+    label { font-size: 0.78rem; font-weight: 600; color: var(--forest); }
+    label .r { color: var(--lime); }
+    input[type=text], input[type=email], input[type=tel], textarea, select { font-family: 'Inter', sans-serif; font-size: 0.88rem; border: 1.5px solid var(--border); border-radius: 8px; padding: 0.6rem 0.85rem; background: var(--cream); color: var(--text); outline: none; width: 100%; transition: border-color 0.2s; }
+    input:focus, textarea:focus, select:focus { border-color: var(--green); background: var(--white); }
+    textarea { min-height: 110px; resize: vertical; }
+    .ubox { border: 2px dashed var(--border); border-radius: 10px; padding: 1.75rem; text-align: center; cursor: pointer; position: relative; transition: border-color 0.2s, background 0.2s; }
+    .ubox:hover { border-color: var(--green); background: var(--mint); }
+    .ubox input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .ui { font-size: 1.75rem; margin-bottom: 0.4rem; }
+    .ut { font-weight: 700; font-size: 0.88rem; color: var(--forest); }
+    .uh { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+    .uf { font-size: 0.78rem; color: var(--lime); font-weight: 700; margin-top: 0.4rem; min-height: 1.1em; }
+    .sbtn { background: var(--lime); color: var(--forest); border: none; border-radius: 8px; padding: 0.85rem 2rem; font-size: 0.9rem; font-weight: 700; font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.2s; }
+    .sbtn:hover { background: #4aa84a; }
+    .fnote { font-size: 0.75rem; color: var(--muted); margin-top: 0.5rem; }
+    #success-box { display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 14px; padding: 2.5rem; text-align: center; margin-top: 2rem; }
+    #success-box h3 { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 800; color: #065f46; margin-bottom: 0.5rem; }
+    #success-box p { color: #166534; font-size: 0.88rem; line-height: 1.6; }
+
+    /* COURSES */
+    .cgrid { display: grid; grid-template-columns: repeat(auto-fill,minmax(270px,1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+    .ccard { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; transition: box-shadow 0.2s, transform 0.15s; }
+    .ccard:hover { box-shadow: 0 6px 20px rgba(13,43,31,0.1); transform: translateY(-2px); }
+    .cci { font-size: 2rem; }
+    .ccn { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--forest); }
+    .ccd { font-size: 0.82rem; color: var(--muted); line-height: 1.6; flex: 1; }
+    .cctags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .cctag { font-size: 0.68rem; font-weight: 700; background: var(--mint); color: var(--green); padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cclink { display: inline-block; margin-top: 0.5rem; background: var(--forest); color: var(--white); text-decoration: none; font-size: 0.82rem; font-weight: 700; padding: 0.5rem 1.1rem; border-radius: 7px; transition: background 0.2s; text-align: center; }
+    .cclink:hover { background: var(--green); }
+
+    /* CTA */
+    .ctabar { background: var(--forest); padding: 4rem 2rem; text-align: center; }
+    .ctabar h2 { font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; color: var(--white); margin-bottom: 0.75rem; }
+    .ctabar p { color: rgba(255,255,255,0.55); font-size: 0.93rem; margin-bottom: 1.75rem; }
+
+    footer { background: var(--forest); color: rgba(255,255,255,0.4); text-align: center; padding: 1.75rem; font-size: 0.78rem; }
+    footer span { color: var(--lime); }
+
+    @media (max-width:720px) {
+      .about-grid,.qcols { grid-template-columns: 1fr; }
+      .about-img { display: none; }
+      .vgrid { grid-template-columns: 1fr 1fr; }
+      .fg { grid-template-columns: 1fr; }
+      .jtop { flex-direction: column; }
+      .abtn { width: 100%; text-align: center; }
+      .stats { gap: 2rem; }
+      nav { padding: 0 1rem; }
+      .nav-links button { padding: 0.4rem 0.55rem; font-size: 0.78rem; }
+    }
+    @media (max-width:480px) { .vgrid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo" onclick="go('home')">Hot <span>Beans</span> Web</div>
+  <div class="nav-links">
+    <button id="nb-home"    onclick="go('home')"    class="active">Home</button>
+    <button id="nb-team"    onclick="go('team')">Our Team</button>
+    <button id="nb-jobs"    onclick="go('jobs')">Jobs</button>
+    <button id="nb-courses" onclick="go('courses')">Courses</button>
+    <button class="nav-cta" onclick="go('jobs')">Apply Now</button>
+  </div>
+</nav>
+
+<!-- ═══ HOME — Req 1: Company Profile ═══ -->
+<div id="page-home" class="page active">
+
+  <div class="hero">
+    <div class="hc">
+      <div class="hbadge">Now Hiring Junior Developers</div>
+      <h1>Build the web.<br><span>Grow your career.</span></h1>
+      <p>Hot Beans Web is a leading UK web development agency. We're recruiting passionate junior developers to join our team and work on real projects for real clients from day one.</p>
+      <div class="hbtns">
+        <button class="btng" onclick="go('jobs')">See Open Roles →</button>
+        <button class="btno" onclick="go('team')">Meet the Team</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="sn">50+</div><div class="sl">Clients</div></div>
+    <div class="stat"><div class="sn">18</div><div class="sl">Team Members</div></div>
+    <div class="stat"><div class="sn">8</div><div class="sl">Years Trading</div></div>
+    <div class="stat"><div class="sn">100%</div><div class="sl">Remote Friendly</div></div>
+  </div>
+
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="lbl">About Hot Beans Web</span>
+        <h2 class="stitle">Who are we?</h2>
+        <p>Hot Beans Web is a full-service web development company based in the UK, specialising in building fast, accessible, and beautifully designed web applications for clients across e-commerce, healthcare, education, and the public sector.</p>
+        <p>Founded in 2017, we have grown from a team of three to over 18 developers, designers, and project managers. We believe in nurturing talent — the majority of our senior team joined us straight from bootcamps or level 3 qualifications, exactly like the roles we are advertising now.</p>
+        <p>We partner with clients ranging from local SMEs to national charities, delivering websites and web apps that are performant, WCAG-compliant, and maintainable for years to come. Our work has won two regional digital industry awards.</p>
+      </div>
+      <div class="about-img"><span>🌱</span></div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="wrap" style="padding-top:3rem;">
+    <span class="lbl">Our Values</span>
+    <h2 class="stitle">What we stand for</h2>
+    <div class="vgrid">
+      <div class="vcard"><div class="vi">🚀</div><div class="vt">Continuous Growth</div><div class="vd">Every team member gets a £1,500/year learning budget, mentorship, and dedicated time to explore new technologies.</div></div>
+      <div class="vcard"><div class="vi">🤝</div><div class="vt">Collaboration First</div><div class="vd">Developers, designers, and PMs work together from day one. No silos — just great teamwork and shared ownership.</div></div>
+      <div class="vcard"><div class="vi">♿</div><div class="vt">Accessible by Default</div><div class="vd">We build to WCAG 2.1 AA on every project. Accessibility is part of our workflow, not an afterthought.</div></div>
+      <div class="vcard"><div class="vi">⚡</div><div class="vt">Real Responsibility</div><div class="vd">Junior devs ship real code to production in their first month. We learn by doing, not by watching.</div></div>
+      <div class="vcard"><div class="vi">🌍</div><div class="vt">Remote &amp; Inclusive</div><div class="vd">Work from anywhere in the UK. We have a diverse, welcoming team and zero tolerance for discrimination.</div></div>
+      <div class="vcard"><div class="vi">🧪</div><div class="vt">Quality Standards</div><div class="vd">Code review, automated testing, and documentation are built into every sprint — we take pride in our craft.</div></div>
+    </div>
+  </div>
+
+  <div class="ctabar">
+    <h2>Ready to grow with us?</h2>
+    <p>We have open roles for Junior Frontend and Backend developers right now.</p>
+    <button class="btng" onclick="go('jobs')">View Open Roles →</button>
+  </div>
+
+  <footer>© 2025 <span>Hot Beans Web</span> Ltd · Registered in England &amp; Wales · All rights reserved</footer>
+</div>
+
+
+<!-- ═══ TEAM — Req 2: Trainee Profiles ═══ -->
+<div id="page-team" class="page">
+  <div class="wrap">
+    <span class="lbl">The Crew</span>
+    <h2 class="stitle">Meet our trainee developers</h2>
+    <p class="ssub">Every one of our trainees joined us fresh from a course or qualification — just like yours. Read their stories: where they came from, what they studied, and what they're building now.</p>
+    <div class="tgrid" id="team-grid"></div>
+  </div>
+  <footer>© 2025 <span>Hot Beans Web</span> Ltd · All rights reserved</footer>
+</div>
+
+
+<!-- ═══ JOBS — Req 3: Specs & Quals + Req 4: Form ═══ -->
+<div id="page-jobs" class="page">
+  <div class="wrap">
+    <span class="lbl">Open Positions</span>
+    <h2 class="stitle">Current vacancies</h2>
+    <p class="ssub">We are currently hiring two junior developer roles. Both are open to candidates who have recently completed a relevant qualification, bootcamp, or self-study programme.</p>
+
+    <!-- Job 1 -->
+    <div class="jcard" style="margin-top:2.5rem;">
+      <div class="jtop">
+        <div>
+          <div class="jt">Junior Frontend Developer</div>
+          <div class="chips">
+            <span class="chip cg">Full-time</span>
+            <span class="chip cg">Remote (UK)</span>
+            <span class="chip cs">£24,000 – £28,000</span>
+          </div>
+        </div>
+        <button class="abtn" onclick="openForm('Junior Frontend Developer')">Apply Now →</button>
+      </div>
+      <p class="ov">Join our frontend team to build responsive, accessible web interfaces for clients across the UK. You will be mentored by a senior developer and take ownership of real client-facing features from your first month.</p>
+      <div class="jsh">Key Responsibilities</div>
+      <ul>
+        <li>Build responsive UIs using semantic HTML5, CSS3, and JavaScript (ES6+)</li>
+        <li>Develop reusable React components for our shared component library</li>
+        <li>Implement designs from Figma files with pixel-level accuracy</li>
+        <li>Write clean, documented code and take part in regular peer code reviews</li>
+        <li>Cross-browser and device testing to ensure compatibility</li>
+        <li>Perform accessibility audits against WCAG 2.1 AA standards</li>
+        <li>Optimise pages for performance using Lighthouse and Core Web Vitals</li>
+      </ul>
+      <div class="jsh">Required Qualifications &amp; Skills</div>
+      <div class="qcols">
+        <ul>
+          <li>Level 3 qualification in IT, Computing, or Software Development (e.g. BTEC, A-Level)</li>
+          <li>Accredited web development bootcamp or equivalent self-study with portfolio evidence</li>
+          <li>Solid understanding of HTML, CSS, and JavaScript fundamentals</li>
+          <li>Version control experience with Git and GitHub</li>
+        </ul>
+        <ul>
+          <li>Portfolio of at least 2 completed web projects (academic or personal)</li>
+          <li>GCSE Maths and English at Grade C / 4 or above</li>
+          <li>Clear written and verbal communication skills</li>
+          <li>Comfortable working in an agile sprint environment</li>
+        </ul>
+      </div>
+      <div class="jsh">Desirable (Not Essential)</div>
+      <ul>
+        <li>Experience with React, Vue, or another JavaScript framework</li>
+        <li>Knowledge of CSS pre-processors (Sass) or utility frameworks (Tailwind)</li>
+        <li>Awareness of web performance, SEO fundamentals, and accessibility tooling</li>
+        <li>Familiarity with Figma or similar UI design tools</li>
+      </ul>
+    </div>
+
+    <!-- Job 2 -->
+    <div class="jcard">
+      <div class="jtop">
+        <div>
+          <div class="jt">Junior Backend Developer</div>
+          <div class="chips">
+            <span class="chip cg">Full-time</span>
+            <span class="chip cg">London / Remote</span>
+            <span class="chip cs">£25,000 – £30,000</span>
+          </div>
+        </div>
+        <button class="abtn" onclick="openForm('Junior Backend Developer')">Apply Now →</button>
+      </div>
+      <p class="ov">Join our backend team to build and maintain the APIs, databases, and server infrastructure that power our client applications. Expect real responsibility and strong mentorship from day one.</p>
+      <div class="jsh">Key Responsibilities</div>
+      <ul>
+        <li>Develop RESTful APIs using Node.js (Express) or Python (Django / Flask)</li>
+        <li>Design and manage relational databases using PostgreSQL or MySQL</li>
+        <li>Write unit and integration tests to maintain code reliability</li>
+        <li>Deploy and monitor applications on AWS or GCP</li>
+        <li>Implement server security including input validation and authentication (OAuth2 / JWT)</li>
+        <li>Document APIs using OpenAPI / Swagger specifications</li>
+        <li>Participate in sprint planning, standups, and retrospectives</li>
+      </ul>
+      <div class="jsh">Required Qualifications &amp; Skills</div>
+      <div class="qcols">
+        <ul>
+          <li>Level 3 qualification in Computing, Software Development, or equivalent</li>
+          <li>Completion of a coding bootcamp or programming-focused course</li>
+          <li>Working knowledge of at least one server-side language (Python, Node.js, or PHP)</li>
+          <li>Basic SQL and relational database design understanding</li>
+        </ul>
+        <ul>
+          <li>Familiarity with HTTP, REST APIs, and JSON data structures</li>
+          <li>Experience using Git for version control in a real project context</li>
+          <li>Strong analytical and debugging mindset</li>
+          <li>GCSE Maths and English at Grade C / 4 or above</li>
+        </ul>
+      </div>
+      <div class="jsh">Desirable (Not Essential)</div>
+      <ul>
+        <li>Experience with Docker or containerised development environments</li>
+        <li>Awareness of CI/CD pipelines (e.g. GitHub Actions, CircleCI)</li>
+        <li>Exposure to NoSQL databases such as MongoDB or Redis</li>
+        <li>Basic understanding of microservices architecture patterns</li>
+      </ul>
+    </div>
+
+    <!-- Req 4: Online Application Form -->
+    <div id="apply-anchor"></div>
+    <section id="form-section">
+      <div class="fbanner">
+        <div>
+          <div class="fbl">Applying for</div>
+          <div class="fbr" id="form-role-name"></div>
+        </div>
+        <button class="cx" onclick="closeForm()" title="Close">&times;</button>
+      </div>
+      <span class="lbl">Online Application Form</span>
+      <h2 class="stitle" style="margin-bottom:1.5rem;">Tell us about yourself</h2>
+      <form id="app-form" onsubmit="submitForm(event)">
+        <div class="fg">
+          <div class="fgg"><label for="f-first">First name <span class="r">*</span></label><input type="text" id="f-first" required placeholder="Jane" /></div>
+          <div class="fgg"><label for="f-last">Last name <span class="r">*</span></label><input type="text" id="f-last" required placeholder="Smith" /></div>
+          <div class="fgg"><label for="f-email">Email address <span class="r">*</span></label><input type="email" id="f-email" required placeholder="jane@example.com" /></div>
+          <div class="fgg"><label for="f-phone">Phone number <span class="r">*</span></label><input type="tel" id="f-phone" required placeholder="+44 7700 000000" /></div>
+          <div class="fgg full"><label for="f-port">GitHub / Portfolio URL <span class="r">*</span></label><input type="text" id="f-port" required placeholder="https://github.com/janesmith" /></div>
+          <div class="fgg full">
+            <label for="f-qual">Highest relevant qualification <span class="r">*</span></label>
+            <select id="f-qual" required>
+              <option value="">— Select your qualification —</option>
+              <option>BTEC Level 3 in Computing</option>
+              <option>A-Level Computer Science</option>
+              <option>Web Development Bootcamp Certificate</option>
+              <option>HND / HNC Computing</option>
+              <option>BSc Computer Science or related degree</option>
+              <option>freeCodeCamp / The Odin Project certification</option>
+              <option>Other relevant qualification</option>
+            </select>
+          </div>
+          <div class="fgg full"><label for="f-cover">Why do you want to join Hot Beans Web? <span class="r">*</span></label><textarea id="f-cover" required placeholder="Tell us about your background, what you have built, and why this role excites you. The more specific, the better!"></textarea></div>
+          <div class="fgg full">
+            <label>Upload your CV / Résumé <span class="r">*</span></label>
+            <div class="ubox" id="ubox">
+              <input type="file" id="f-cv" accept=".pdf,.doc,.docx" required onchange="pickFile(this)" />
+              <div class="ui">📄</div>
+              <div class="ut">Drop your CV here, or click to browse</div>
+              <div class="uh">PDF, DOC, or DOCX · Maximum 5 MB</div>
+              <div class="uf" id="u-fname"></div>
+            </div>
+          </div>
+          <div class="fgg full">
+            <button type="submit" class="sbtn">Submit Application →</button>
+            <p class="fnote">Your information is stored securely, used only for this application, and handled in line with GDPR. We will be in touch within 7 working days.</p>
+          </div>
+        </div>
+      </form>
+    </section>
+    <div id="success-box">
+      <div style="font-size:2.5rem;margin-bottom:0.75rem;">✅</div>
+      <h3>Application received!</h3>
+      <p>Thank you for applying to Hot Beans Web. We will review your submission and aim to be in touch within 7 working days. Good luck!</p>
+    </div>
+  </div>
+  <footer>© 2025 <span>Hot Beans Web</span> Ltd · All rights reserved</footer>
+</div>
+
+
+<!-- ═══ COURSES — Req 5: Course Links ═══ -->
+<div id="page-courses" class="page">
+  <div class="wrap">
+    <span class="lbl">Learning Resources</span>
+    <h2 class="stitle">Recommended web development courses</h2>
+    <p class="ssub">Not quite ready to apply yet? These are the courses and resources we recommend to anyone wanting to break into web development. Many of our current team used these exact platforms to get their start.</p>
+    <div class="cgrid" id="courses-grid"></div>
+  </div>
+  <footer>© 2025 <span>Hot Beans Web</span> Ltd · All rights reserved</footer>
+</div>
+
+
+<script>
+  function go(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-links button[id]').forEach(b => b.classList.remove('active'));
+    const nb = document.getElementById('nb-' + name);
+    if (nb) nb.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Req 2 — Trainee profiles
+  const team = [
+    { name:'Chloe Davies',   role:'Junior Frontend Dev', qual:'BTEC L3 Computing',  seed:'Chloe',   bio:'Chloe joined us straight from college after her BTEC. Within two months she was shipping React components to production for a national charity client.' },
+    { name:'Marcus Asante',  role:'Junior Backend Dev',  qual:'CodeClan Bootcamp',  seed:'Marcus',  bio:'Marcus switched from retail after a 16-week bootcamp. Now he writes Node.js APIs serving thousands of daily users, and recently led a database optimisation project.' },
+    { name:'Priya Shah',     role:'Junior Frontend Dev', qual:'The Odin Project',   seed:'Priya',   bio:'Self-taught via The Odin Project, Priya built a portfolio of 5 projects before applying. She joined six months ago and is now leading accessibility work on a major e-commerce site.' },
+    { name:'Tom Griffiths',  role:'Junior Full-Stack',   qual:'BSc Computer Sci.',  seed:'Tom',     bio:'Tom is a recent CS graduate who chose Hot Beans over a corporate grad scheme for the real-world experience. He now works across frontend and backend on three client projects.' },
+    { name:'Aisha Okafor',   role:'Junior Backend Dev',  qual:'HND Computing',      seed:'Aisha',   bio:'Aisha completed her HND at Coventry College and joined us six months later. Passionate about database design, she has already become the go-to person for complex SQL on the team.' },
+    { name:'Ryan Patel',     role:'Junior Frontend Dev', qual:'freeCodeCamp Certs', seed:'Ryan',    bio:'Ryan earned his freeCodeCamp certifications while working part-time. His portfolio stood out so strongly that we offered the role on the spot. He is currently building our new design system.' },
+  ];
+  document.getElementById('team-grid').innerHTML = team.map(m => `
+    <div class="tcard">
+      <div class="ava"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=${m.seed}&backgroundColor=d4edda&radius=50" alt="Illustrated avatar of ${m.name}" loading="lazy" /></div>
+      <div class="tn">${m.name}</div>
+      <div class="tr">${m.role}</div>
+      <span class="tq">${m.qual}</span>
+      <div class="tb">${m.bio}</div>
+    </div>`).join('');
+
+  // Req 5 — Course links
+  const courses = [
+    { icon:'🆓', name:'freeCodeCamp',      desc:'Completely free curriculum covering HTML, CSS, JavaScript, React, Node.js, and more — with certifications included at no cost.',                                    tags:['Free','HTML','CSS','JS','React'],        url:'https://www.freecodecamp.org' },
+    { icon:'🌳', name:'The Odin Project',  desc:'A free, open-source full-stack curriculum built around real projects. One of the most thorough self-taught routes into professional web development.',              tags:['Free','Full-Stack','Project-based'],     url:'https://www.theodinproject.com' },
+    { icon:'📘', name:'Codecademy',        desc:'Interactive, browser-based coding lessons for all levels. Excellent structured paths for HTML, CSS, JavaScript, Python, React, and SQL.',                          tags:['Beginner-friendly','Interactive'],       url:'https://www.codecademy.com' },
+    { icon:'📚', name:'MDN Web Docs',      desc:'Mozilla\'s official web docs. The definitive reference for HTML, CSS, and JavaScript — essential reading for every developer at every level.',                     tags:['Free','Official Reference'],            url:'https://developer.mozilla.org' },
+    { icon:'🎓', name:'Coursera',          desc:'University-backed web development courses from institutions including the University of Michigan. Most courses are free to audit, with paid certificates available.',tags:['Free Audit','University','Certificates'], url:'https://www.coursera.org/browse/computer-science/web-development' },
+    { icon:'🏫', name:'W3Schools',         desc:'Quick-reference tutorials and sandbox editors for HTML, CSS, JavaScript, SQL, and more. Perfect for looking up syntax and experimenting directly in your browser.',  tags:['Free','Reference','Try-it Editor'],      url:'https://www.w3schools.com' },
+  ];
+  document.getElementById('courses-grid').innerHTML = courses.map(c => `
+    <div class="ccard">
+      <div class="cci">${c.icon}</div>
+      <div class="ccn">${c.name}</div>
+      <div class="ccd">${c.desc}</div>
+      <div class="cctags">${c.tags.map(t=>`<span class="cctag">${t}</span>`).join('')}</div>
+      <a class="cclink" href="${c.url}" target="_blank" rel="noopener noreferrer">Visit Site →</a>
+    </div>`).join('');
+
+  // Req 4 — Form functions
+  function openForm(role) {
+    document.getElementById('form-role-name').textContent = role;
+    const s = document.getElementById('form-section');
+    s.style.display = 'block';
+    document.getElementById('success-box').style.display = 'none';
+    setTimeout(() => s.scrollIntoView({ behavior: 'smooth' }), 100);
+  }
+  function closeForm() {
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('app-form').reset();
+    document.getElementById('u-fname').textContent = '';
+  }
+  function pickFile(input) {
+    const f = input.files[0];
+    if (!f) return;
+    if (f.size > 5*1024*1024) { alert('File too large — max 5 MB.'); input.value=''; return; }
+    document.getElementById('u-fname').textContent = '✓  ' + f.name;
+  }
+  const ubox = document.getElementById('ubox');
+  ubox.addEventListener('dragover',  e => { e.preventDefault(); ubox.style.borderColor='var(--green)'; });
+  ubox.addEventListener('dragleave', () => { ubox.style.borderColor=''; });
+  ubox.addEventListener('drop',      () => { ubox.style.borderColor=''; });
+  function submitForm(e) {
+    e.preventDefault();
+    closeForm();
+    const s = document.getElementById('success-box');
+    s.style.display = 'block';
+    s.scrollIntoView({ behavior:'smooth' });
+  }
+</script>
+</body>
+</html>
